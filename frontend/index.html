@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>InterviewIQ — Behavioural Interview Feedback Assistant</title>
+  <meta name="description" content="Practice behavioural interviews for 12 professional roles with AI-powered feedback. Master the STAR method and ace your next interview." />
+  <link rel="stylesheet" href="/css/styles.css" />
+  <style>
+    .stat-number { font-family: var(--font-display); font-size: 2.5rem; font-weight: 800; background: var(--grad-primary); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+    .stat-label  { font-size: .85rem; color: var(--t-muted); font-weight: 500; }
+    .stats-row   { display: flex; gap: 3rem; justify-content: center; flex-wrap: wrap; margin: 2.5rem 0; }
+    .roles-preview { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px,1fr)); gap:.75rem; max-width:700px; margin:0 auto; }
+    .role-pill { padding:.55rem 1rem; background:var(--c-surface); border:1px solid var(--c-border); border-radius:var(--r-full); text-align:center; font-size:.82rem; font-weight:500; color:var(--t-secondary); transition:all var(--t-fast); }
+    .role-pill:hover { border-color:rgba(139,92,246,.4); color:var(--t-accent); }
+  </style>
+</head>
+<body>
+<!-- Navbar -->
+<nav class="navbar" aria-label="Main navigation">
+  <div class="navbar-inner">
+    <a href="/index.html" class="navbar-brand" aria-label="InterviewIQ Home">
+      <div class="brand-icon" aria-hidden="true">🎯</div>
+      <span class="brand-name">InterviewIQ</span>
+    </a>
+    <div class="navbar-links">
+      <a href="/index.html" class="nav-link active" id="nav-home">Home</a>
+      <a href="/dashboard.html" class="nav-link hidden" id="nav-dashboard">Practice</a>
+      <a href="/history.html" class="nav-link hidden" id="nav-history">History</a>
+    </div>
+    <div class="navbar-actions">
+      <span class="text-secondary" id="nav-user" style="font-size:.9rem;font-weight:500;" aria-label="Logged in user"></span>
+      <a href="/index.html#auth" class="btn btn-primary btn-sm" id="nav-login-btn">Sign In</a>
+      <button class="btn btn-ghost btn-sm hidden" id="nav-logout-btn" aria-label="Log out">Log Out</button>
+    </div>
+  </div>
+</nav>
+
+<div class="page">
+  <!-- Hero -->
+  <section class="hero" aria-labelledby="hero-heading">
+    <div>
+      <div class="hero-badge" role="text">✨ AI-Powered Interview Coach</div>
+      <h1 id="hero-heading">Ace Every <span class="text-gradient">Behavioural</span><br>Interview</h1>
+      <p class="hero-subtitle">
+        Practice with role-specific question banks, get AI-generated feedback on your STAR method responses, and build the confidence to succeed in any interview.
+      </p>
+      <div class="stats-row" role="list">
+        <div role="listitem"><div class="stat-number">12</div><div class="stat-label">Professional Roles</div></div>
+        <div role="listitem"><div class="stat-number">540+</div><div class="stat-label">Curated Questions</div></div>
+        <div role="listitem"><div class="stat-number">3</div><div class="stat-label">Response Modes</div></div>
+      </div>
+      <div class="hero-actions">
+        <a href="/dashboard.html" class="btn btn-primary btn-lg" id="cta-start">Start Practising Free →</a>
+        <a href="#features" class="btn btn-ghost btn-lg">See How It Works</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section class="section" id="features" aria-labelledby="features-heading">
+    <div class="container">
+      <div class="text-center mb-lg">
+        <h2 id="features-heading">Everything You Need to <span class="text-gradient">Excel</span></h2>
+        <p style="margin:.75rem auto 0;max-width:500px;">A comprehensive platform that simulates real interview conditions and delivers actionable, evidence-based feedback.</p>
+      </div>
+      <div class="features-grid mt-xl">
+        <div class="feature-card">
+          <div class="feature-icon" style="background:rgba(99,102,241,.15);" aria-hidden="true">🎯</div>
+          <h3>Role-Specific Question Banks</h3>
+          <p>40–50 curated behavioural questions for each of 12 professional roles across technical and non-technical tracks.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon" style="background:rgba(16,185,129,.15);" aria-hidden="true">🔀</div>
+          <h3>Seeded Random Selection</h3>
+          <p>10–15 questions per session, reproducibly selected. Same seed, same questions — perfect for comparing your improvement.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon" style="background:rgba(239,68,68,.15);" aria-hidden="true">🎙️</div>
+          <h3>Text, Voice &amp; Video Modes</h3>
+          <p>Type your answers, speak them aloud, or record a video response. Practice in the format that feels most natural.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon" style="background:rgba(245,158,11,.15);" aria-hidden="true">🤖</div>
+          <h3>AI-Powered Evaluation</h3>
+          <p>Google Gemini evaluates all your responses holistically — one consolidated report with STAR-method analysis.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon" style="background:rgba(59,130,246,.15);" aria-hidden="true">📊</div>
+          <h3>Competency Scoring</h3>
+          <p>Detailed breakdowns by role-specific competencies with weighted overall scores and evidence-based observations.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon" style="background:rgba(168,85,247,.15);" aria-hidden="true">📜</div>
+          <h3>Interview History</h3>
+          <p>Access all past sessions and reports. Track your progress over time and revisit your answers.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Supported roles -->
+  <section class="section" style="padding-top:0;" aria-labelledby="roles-heading">
+    <div class="container text-center">
+      <h2 id="roles-heading">Supported <span class="text-gradient">Roles</span></h2>
+      <p style="margin:.75rem auto 1.5rem;">Technical and non-technical roles covering the most common interview scenarios.</p>
+      <div class="roles-preview" role="list">
+        <div class="role-pill" role="listitem">Software Engineer</div>
+        <div class="role-pill" role="listitem">Data Scientist</div>
+        <div class="role-pill" role="listitem">Data Analyst</div>
+        <div class="role-pill" role="listitem">ML Engineer</div>
+        <div class="role-pill" role="listitem">DevOps Engineer</div>
+        <div class="role-pill" role="listitem">Cybersecurity Eng.</div>
+        <div class="role-pill" role="listitem">Product Manager</div>
+        <div class="role-pill" role="listitem">Business Analyst</div>
+        <div class="role-pill" role="listitem">HR Professional</div>
+        <div class="role-pill" role="listitem">Marketing Manager</div>
+        <div class="role-pill" role="listitem">Sales Executive</div>
+        <div class="role-pill" role="listitem">Management &amp; Consulting</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Auth Section -->
+  <section class="section" id="auth" aria-labelledby="auth-heading">
+    <div class="container">
+      <div style="max-width:440px;margin:0 auto;">
+        <!-- Tabs -->
+        <div class="tabs mb-lg" role="tablist">
+          <button class="tab active" id="tab-login" role="tab" aria-selected="true" aria-controls="panel-login" onclick="switchTab('login')">Sign In</button>
+          <button class="tab" id="tab-register" role="tab" aria-selected="false" aria-controls="panel-register" onclick="switchTab('register')">Create Account</button>
+        </div>
+
+        <!-- Login Panel -->
+        <div id="panel-login" class="auth-card" role="tabpanel" aria-labelledby="tab-login">
+          <h2 id="auth-heading" class="mb-lg">Welcome back</h2>
+          <div id="login-error" class="alert alert-error mb-md hidden" role="alert"></div>
+          <form id="login-form" novalidate>
+            <div class="form-group mb-md">
+              <label class="form-label" for="login-email">Email address</label>
+              <input class="form-input" type="email" id="login-email" name="email" autocomplete="email" required placeholder="you@example.com" />
+            </div>
+            <div class="form-group mb-lg">
+              <label class="form-label" for="login-password">Password</label>
+              <input class="form-input" type="password" id="login-password" name="password" autocomplete="current-password" required placeholder="••••••••" />
+            </div>
+            <button type="submit" class="btn btn-primary btn-full" id="login-submit">Sign In</button>
+          </form>
+          <p class="text-center mt-md" style="font-size:.85rem;">No account? <a href="#auth" onclick="switchTab('register')" style="color:var(--t-accent);">Create one free</a></p>
+        </div>
+
+        <!-- Register Panel -->
+        <div id="panel-register" class="auth-card hidden" role="tabpanel" aria-labelledby="tab-register">
+          <h2 class="mb-lg">Create your account</h2>
+          <div id="register-error" class="alert alert-error mb-md hidden" role="alert"></div>
+          <form id="register-form" novalidate>
+            <div class="form-group mb-md">
+              <label class="form-label" for="reg-name">Full Name</label>
+              <input class="form-input" type="text" id="reg-name" name="full_name" autocomplete="name" placeholder="Jane Smith" />
+            </div>
+            <div class="form-group mb-md">
+              <label class="form-label" for="reg-email">Email address</label>
+              <input class="form-input" type="email" id="reg-email" name="email" autocomplete="email" required placeholder="you@example.com" />
+            </div>
+            <div class="form-group mb-lg">
+              <label class="form-label" for="reg-password">Password <span style="font-weight:400;text-transform:none;letter-spacing:0;">(min 6 chars)</span></label>
+              <input class="form-input" type="password" id="reg-password" name="password" autocomplete="new-password" required placeholder="••••••••" />
+            </div>
+            <button type="submit" class="btn btn-primary btn-full" id="register-submit">Create Account</button>
+          </form>
+          <p class="text-center mt-md" style="font-size:.85rem;">Already have an account? <a href="#auth" onclick="switchTab('login')" style="color:var(--t-accent);">Sign in</a></p>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<div id="toast-container" aria-live="polite"></div>
+
+<script src="/js/auth.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  updateNavbar();
+  // If already logged in, redirect CTA to dashboard
+  if (isLoggedIn()) {
+    const cta = document.getElementById('cta-start');
+    if (cta) cta.href = '/dashboard.html';
+  }
+});
+
+function switchTab(tab) {
+  const loginPanel = document.getElementById('panel-login');
+  const registerPanel = document.getElementById('panel-register');
+  const loginTab = document.getElementById('tab-login');
+  const registerTab = document.getElementById('tab-register');
+
+  if (tab === 'login') {
+    loginPanel.classList.remove('hidden');
+    registerPanel.classList.add('hidden');
+    loginTab.classList.add('active');
+    loginTab.setAttribute('aria-selected', 'true');
+    registerTab.classList.remove('active');
+    registerTab.setAttribute('aria-selected', 'false');
+  } else {
+    registerPanel.classList.remove('hidden');
+    loginPanel.classList.add('hidden');
+    registerTab.classList.add('active');
+    registerTab.setAttribute('aria-selected', 'true');
+    loginTab.classList.remove('active');
+    loginTab.setAttribute('aria-selected', 'false');
+  }
+}
+
+// ── Login ─────────────────────────────────────────────────────────────────────
+document.getElementById('login-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const btn = document.getElementById('login-submit');
+  const errEl = document.getElementById('login-error');
+  errEl.classList.add('hidden');
+
+  const email = document.getElementById('login-email').value.trim();
+  const password = document.getElementById('login-password').value;
+
+  if (!email || !password) { errEl.textContent = 'Please fill in all fields.'; errEl.classList.remove('hidden'); return; }
+
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span> Signing in…';
+  try {
+    const data = await apiFetch('/auth/login-json', { method: 'POST', body: JSON.stringify({ email, password }) });
+    setToken(data.access_token);
+    const user = await apiFetch('/auth/me');
+    setUser(user);
+    showToast('Signed in successfully!', 'success');
+    setTimeout(() => { window.location.href = '/dashboard.html'; }, 500);
+  } catch (err) {
+    errEl.textContent = err.message;
+    errEl.classList.remove('hidden');
+    btn.disabled = false;
+    btn.textContent = 'Sign In';
+  }
+});
+
+// ── Register ──────────────────────────────────────────────────────────────────
+document.getElementById('register-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const btn = document.getElementById('register-submit');
+  const errEl = document.getElementById('register-error');
+  errEl.classList.add('hidden');
+
+  const email = document.getElementById('reg-email').value.trim();
+  const password = document.getElementById('reg-password').value;
+  const full_name = document.getElementById('reg-name').value.trim();
+
+  if (!email || !password) { errEl.textContent = 'Email and password are required.'; errEl.classList.remove('hidden'); return; }
+
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span> Creating account…';
+  try {
+    await apiFetch('/auth/register', { method: 'POST', body: JSON.stringify({ email, password, full_name: full_name || undefined }) });
+    // Auto-login
+    const data = await apiFetch('/auth/login-json', { method: 'POST', body: JSON.stringify({ email, password }) });
+    setToken(data.access_token);
+    const user = await apiFetch('/auth/me');
+    setUser(user);
+    showToast('Account created! Welcome to InterviewIQ 🎉', 'success');
+    setTimeout(() => { window.location.href = '/dashboard.html'; }, 600);
+  } catch (err) {
+    errEl.textContent = err.message;
+    errEl.classList.remove('hidden');
+    btn.disabled = false;
+    btn.textContent = 'Create Account';
+  }
+});
+</script>
+</body>
+</html>

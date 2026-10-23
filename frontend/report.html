@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Evaluation Report</title><link rel="stylesheet" href="/css/styles.css"><style>.score{font-size:4rem;font-weight:800;color:var(--t-accent)}.meter{height:8px;background:var(--c-border);border-radius:8px}.meter i{height:100%;display:block;border-radius:8px;background:var(--grad-cta)}li{margin:.6rem 0}</style></head>
+<body><nav class="navbar"><div class="navbar-inner"><a href="/dashboard.html" class="navbar-brand">InterviewIQ</a><a href="/history.html">History</a><button id="nav-logout-btn" class="btn btn-ghost btn-sm">Log out</button></div></nav><main class="container page"><div id="report" class="card">Loading report…</div></main><script src="/js/auth.js"></script><script>
+const sessionId = new URLSearchParams(location.search).get('session');
+let pollTimer = null;
+let pollAttempts = 0;
+const maxPollAttempts = 60;
+const reportEl = document.getElementById('report');
+
+document.addEventListener('DOMContentLoaded', async () => {
+  if (!requireAuth()) return;
+  updateNavbar();
+  if (!sessionId) { location.href = '/history.html'; return; }
+  await loadReport();
+});
+
+function escapeHtml(value) {
+  return String(value ?? '').replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+}
+
+function schedulePoll() {
+  clearTimeout(pollTimer);
+  if (pollAttempts >= maxPollAttempts) {
+    reportEl.innerHTML = '<h2>Evaluation is taking longer than expected</h2><p>You can check once more or restart evaluation if the backend was restarted while this report was processing.</p><button class="btn btn-ghost" id="check-again">Check status</button> <button class="btn btn-primary" id="retry-stuck">Restart evaluation</button>';
+    document.getElementById('check-again').onclick = () => { pollAttempts = 0; loadReport(); };
+    document.getElementById('retry-stuck').onclick = async () => {
+      const button = document.getElementById('retry-stuck');
+      button.disabled = true;
+      button.textContent = 'Restarting…';
+      try {
+        await apiFetch('/interviews/' + sessionId + '/evaluate', {method:'POST'});
+        pollAttempts = 0;
+        reportEl.textContent = 'Evaluation restarted. Checking status…';
+        schedulePoll();
+      } catch (e) { reportEl.textContent = e.message; }
+    };
+    return;
+  }
+  pollTimer = setTimeout(() => {
+    if (document.hidden) { schedulePoll(); return; }
+    pollAttempts += 1;
+    loadReport();
+  }, 5000);
+}
+
+async function loadReport() {
+  try {
+    const r = await apiFetch('/interviews/' + sessionId + '/report');
+    if (r.processing_status === 'completed') {
+      clearTimeout(pollTimer);
+      renderReport(r);
+    } else if (r.processing_status === 'failed') {
+      clearTimeout(pollTimer);
+      reportEl.innerHTML = `<h2>Evaluation failed</h2><p>${escapeHtml(r.error_message || 'The evaluation providers could not complete this report.')}</p><button class="btn btn-primary" id="retry">Retry evaluation</button>`;
+      document.getElementById('retry').onclick = async () => {
+        const btn = document.getElementById('retry');
+        btn.disabled = true;
+        btn.textContent = 'Retrying…';
+        try {
+          await apiFetch('/interviews/' + sessionId + '/evaluate', {method:'POST'});
+          pollAttempts = 0;
+          reportEl.textContent = 'Evaluation restarted. Checking status…';
+          schedulePoll();
+        } catch (e) { reportEl.textContent = e.message; }
+      };
+    } else {
+      reportEl.innerHTML = '<h2>Evaluation in progress</h2><p>Trying local Ollama first, then Ollama Cloud and Gemini if needed. A slow local model is given up to 45 seconds before fallback. This page checks status every five seconds without reloading.</p>';
+      schedulePoll();
+    }
+  } catch (e) {
+    reportEl.textContent = e.message;
+  }
+}
+
+function renderReport(r) {
+  const list = values => (values || []).map(x => `<li>${escapeHtml(x)}</li>`).join('');
+  const competencyRows = Object.entries(r.competency_scores || {}).map(([name, value]) => {
+    const score = Math.max(0, Math.min(10, Number(value) || 0));
+    return `<div class="mb-md"><b>${escapeHtml(name.replaceAll('_',' '))}</b> · ${score.toFixed(1)}/10<div class="meter"><i style="width:${score*10}%"></i></div></div>`;
+  }).join('');
+  reportEl.innerHTML = `<p>${escapeHtml(r.role_name)} · Bank ${escapeHtml(r.bank_version)} · Evaluation ${escapeHtml(r.evaluation_version)}</p><h1>Interview report</h1><div class="score">${Number(r.overall_score).toFixed(1)} / 10</div><p>${escapeHtml(r.overall_summary)}</p><h2>Competencies</h2>${competencyRows}<div class="grid grid-2"><section><h2>Strengths</h2><ul>${list(r.strengths)}</ul></section><section><h2>Less demonstrated</h2><ul>${list(r.areas_less_demonstrated)}</ul></section></div><h2>Evidence observations</h2><ul>${list(r.evidence_observations)}</ul>${r.assessment_limitations?`<h3>Limitations</h3><p>${escapeHtml(r.assessment_limitations)}</p>`:''}<p>This practice report is not a hiring decision and reflects only submitted responses.</p><a class="btn btn-primary" href="/dashboard.html">Practice again</a> <a class="btn btn-ghost" href="/history.html">History</a>`;
+}
+</script></body></html>

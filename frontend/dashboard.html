@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Start Interview — InterviewIQ</title>
+  <meta name="description" content="Select your role, response mode, and interview length to begin your behavioural interview practice session." />
+  <link rel="stylesheet" href="/css/styles.css" />
+  <style>
+    .setup-layout { display: grid; grid-template-columns: 1fr 340px; gap: 2rem; align-items: start; }
+    .config-panel { position: sticky; top: 90px; }
+    .category-tabs { display:flex; gap:.5rem; margin-bottom:1.5rem; }
+    .category-tab { padding:.5rem 1.25rem; border-radius:var(--r-full); border:1px solid var(--c-border); background:transparent; color:var(--t-secondary); font-size:.875rem; font-weight:600; cursor:pointer; font-family:var(--font-sans); transition:all var(--t-fast); }
+    .category-tab.active { background:var(--grad-cta); color:#fff; border-color:transparent; box-shadow:0 2px 10px var(--glow-purple); }
+    .roles-list { display:flex; flex-direction:column; gap:.6rem; }
+    .mode-options { display:grid; grid-template-columns:repeat(3,1fr); gap:.75rem; }
+    .mode-card { padding:1rem; border-radius:var(--r-lg); border:2px solid var(--c-border); background:var(--c-surface-alt); cursor:pointer; text-align:center; transition:all var(--t-normal); }
+    .mode-card:hover { border-color:rgba(99,102,241,.5); }
+    .mode-card.active { border-color:#6366f1; background:rgba(99,102,241,.12); box-shadow:0 0 0 3px rgba(99,102,241,.15); }
+    .mode-card .mode-icon { font-size:1.75rem; margin-bottom:.4rem; }
+    .mode-card .mode-name { font-weight:600; font-size:.9rem; }
+    .mode-card .mode-desc { font-size:.75rem; color:var(--t-muted); margin-top:.2rem; }
+    .q-count-slider { width:100%; accent-color:#8b5cf6; }
+    .summary-row { display:flex; justify-content:space-between; align-items:center; padding:.5rem 0; border-bottom:1px solid var(--c-border); font-size:.9rem; }
+    .summary-row:last-child { border:none; }
+    .summary-val { font-weight:600; color:var(--t-primary); }
+    @media(max-width:900px) { .setup-layout { grid-template-columns:1fr; } .config-panel { position:static; } }
+  </style>
+</head>
+<body>
+<nav class="navbar">
+  <div class="navbar-inner">
+    <a href="/index.html" class="navbar-brand">
+      <div class="brand-icon">🎯</div>
+      <span class="brand-name">InterviewIQ</span>
+    </a>
+    <div class="navbar-links">
+      <a href="/dashboard.html" class="nav-link active" id="nav-dashboard">Practice</a>
+      <a href="/history.html" class="nav-link" id="nav-history">History</a>
+    </div>
+    <div class="navbar-actions">
+      <span class="text-secondary" id="nav-user" style="font-size:.9rem;font-weight:500;"></span>
+      <button class="btn btn-ghost btn-sm" id="nav-logout-btn">Log Out</button>
+    </div>
+  </div>
+</nav>
+
+<div class="page page-enter">
+  <div class="container" style="padding-top:2.5rem;padding-bottom:4rem;">
+    <div class="mb-xl">
+      <h1>Set Up Your <span class="text-gradient">Interview</span></h1>
+      <p>Choose a role, response mode, and number of questions. Your question set will be locked in before you begin.</p>
+    </div>
+
+    <div id="setup-error" class="alert alert-error mb-lg hidden" role="alert"></div>
+
+    <div class="setup-layout">
+      <!-- Left: Role & Config -->
+      <div>
+        <!-- Step 1: Category + Role -->
+        <div class="card mb-lg">
+          <h3 style="margin-bottom:1.25rem;">① Select Role</h3>
+          <div class="category-tabs" role="tablist">
+            <button class="category-tab active" id="cat-technical" role="tab" onclick="switchCategory('technical')">⚙️ Technical</button>
+            <button class="category-tab" id="cat-non_technical" role="tab" onclick="switchCategory('non_technical')">💼 Non-Technical</button>
+          </div>
+          <div class="roles-list" id="roles-list" role="listbox" aria-label="Available roles">
+            <div class="skeleton" style="height:60px;border-radius:var(--r-lg);"></div>
+            <div class="skeleton" style="height:60px;border-radius:var(--r-lg);"></div>
+            <div class="skeleton" style="height:60px;border-radius:var(--r-lg);"></div>
+          </div>
+        </div>
+
+        <!-- Step 2: Response Mode -->
+        <div class="card mb-lg">
+          <h3 style="margin-bottom:1.25rem;">② Response Mode</h3>
+          <div class="mode-options" role="radiogroup" aria-label="Response mode">
+            <div class="mode-card active" id="mode-text" onclick="selectMode('text')" role="radio" aria-checked="true" tabindex="0">
+              <div class="mode-icon">📝</div>
+              <div class="mode-name">Text</div>
+              <div class="mode-desc">Type your answers</div>
+            </div>
+            <div class="mode-card" id="mode-voice" onclick="selectMode('voice')" role="radio" aria-checked="false" tabindex="0">
+              <div class="mode-icon">🎙️</div>
+              <div class="mode-name">Voice</div>
+              <div class="mode-desc">Speak your answers</div>
+            </div>
+            <div class="mode-card" id="mode-video" onclick="selectMode('video')" role="radio" aria-checked="false" tabindex="0">
+              <div class="mode-icon">🎥</div>
+              <div class="mode-name">Video</div>
+              <div class="mode-desc">Record video answers</div>
+            </div>
+          </div>
+          <div id="mode-consent" class="alert alert-info mt-md hidden" role="note">
+            Recording requires microphone/camera access. Speech transcripts are saved with your interview. Video previews stay in this browser and are not uploaded.
+          </div>
+        </div>
+
+        <!-- Step 3: Question Count -->
+        <div class="card">
+          <h3 style="margin-bottom:1.25rem;">③ Number of Questions</h3>
+          <div style="display:flex;align-items:center;gap:1rem;margin-bottom:.75rem;">
+            <input type="range" class="q-count-slider" id="q-count" min="10" max="15" value="10" aria-label="Number of questions" oninput="updateQCount(this.value)" />
+            <span id="q-count-display" style="font-family:var(--font-display);font-size:2rem;font-weight:800;color:var(--t-accent);min-width:40px;">10</span>
+          </div>
+          <p style="font-size:.85rem;">Choose between 10 and 15 questions. The full set is locked in before you start.</p>
+        </div>
+      </div>
+
+      <!-- Right: Summary + Start -->
+      <div class="config-panel">
+        <div class="card card-glow">
+          <h3 style="margin-bottom:1.25rem;">Session Summary</h3>
+
+          <div class="summary-row">
+            <span class="text-secondary">Role</span>
+            <span class="summary-val" id="sum-role">—</span>
+          </div>
+          <div class="summary-row">
+            <span class="text-secondary">Category</span>
+            <span id="sum-category" class="badge badge-purple">—</span>
+          </div>
+          <div class="summary-row">
+            <span class="text-secondary">Mode</span>
+            <span id="sum-mode" class="badge badge-blue">📝 Text</span>
+          </div>
+          <div class="summary-row">
+            <span class="text-secondary">Questions</span>
+            <span class="summary-val" id="sum-count">10</span>
+          </div>
+          <div class="summary-row">
+            <span class="text-secondary">Est. Duration</span>
+            <span class="summary-val" id="sum-duration">~15 min</span>
+          </div>
+
+          <div class="divider"></div>
+
+          <div class="alert alert-info mb-md" role="note" style="font-size:.8rem;">
+            Questions are randomly selected and locked in before you start. They will not change based on your answers.
+          </div>
+
+          <button class="btn btn-primary btn-full btn-lg" id="start-btn" disabled onclick="startInterview()">
+            Start Interview →
+          </button>
+          <p class="text-center mt-sm" style="font-size:.78rem;color:var(--t-muted);">You can pause and resume this session anytime.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="toast-container" aria-live="polite"></div>
+
+<script src="/js/auth.js"></script>
+<script>
+let allRoles = { technical: [], non_technical: [] };
+let selectedRole = null;
+let selectedMode = 'text';
+let questionCount = 10;
+let currentCategory = 'technical';
+
+const roleIcons = { SDE:'💻', DS:'📊', DA:'📈', MLE:'🤖', DEVOPS:'⚙️', CYBERSEC:'🔒', PM:'🗺️', BA:'📋', HR:'🤝', MKT:'📣', SALES:'📞', MC:'🏢' };
+
+document.addEventListener('DOMContentLoaded', async () => {
+  if (!requireAuth()) return;
+  updateNavbar();
+  await loadRoles();
+});
+
+async function loadRoles() {
+  try {
+    const data = await apiFetch('/roles');
+    allRoles = data;
+    renderRoles('technical');
+  } catch (err) {
+    document.getElementById('setup-error').textContent = 'Failed to load roles: ' + err.message;
+    document.getElementById('setup-error').classList.remove('hidden');
+  }
+}
+
+function switchCategory(cat) {
+  currentCategory = cat;
+  selectedRole = null;
+  updateSummary();
+  document.getElementById('cat-technical').classList.toggle('active', cat === 'technical');
+  document.getElementById('cat-non_technical').classList.toggle('active', cat === 'non_technical');
+  renderRoles(cat);
+}
+
+function renderRoles(cat) {
+  const list = document.getElementById('roles-list');
+  const roles = allRoles[cat] || [];
+  list.innerHTML = roles.map(r => `
+    <div class="role-card" id="role-${r.role_id}" onclick="selectRole('${r.role_id}')" role="option" aria-selected="false" tabindex="0" onkeydown="if(event.key==='Enter')selectRole('${r.role_id}')">
+      <div class="role-icon" style="background:rgba(99,102,241,.12);">${roleIcons[r.role_id] || '💼'}</div>
+      <div class="role-info">
+        <h4>${r.role_name}</h4>
+        <p>${r.competencies.slice(0,3).map(c=>c.replace(/_/g,' ')).join(' · ')}</p>
+      </div>
+    </div>
+  `).join('');
+}
+
+function selectRole(roleId) {
+  selectedRole = allRoles[currentCategory].find(r => r.role_id === roleId);
+  document.querySelectorAll('.role-card').forEach(el => { el.classList.remove('active'); el.setAttribute('aria-selected','false'); });
+  const el = document.getElementById(`role-${roleId}`);
+  if (el) { el.classList.add('active'); el.setAttribute('aria-selected','true'); }
+  updateSummary();
+}
+
+function selectMode(mode) {
+  selectedMode = mode;
+  ['text','voice','video'].forEach(m => {
+    const el = document.getElementById(`mode-${m}`);
+    el.classList.toggle('active', m === mode);
+    el.setAttribute('aria-checked', m === mode ? 'true' : 'false');
+  });
+  const consent = document.getElementById('mode-consent');
+  consent.classList.toggle('hidden', mode === 'text');
+  updateSummary();
+}
+
+function updateQCount(v) {
+  questionCount = parseInt(v);
+  document.getElementById('q-count-display').textContent = v;
+  document.getElementById('sum-count').textContent = v;
+  const mins = Math.round(questionCount * 1.5);
+  document.getElementById('sum-duration').textContent = `~${mins} min`;
+  document.getElementById('sum-count').textContent = questionCount;
+}
+
+function updateSummary() {
+  document.getElementById('sum-role').textContent = selectedRole ? selectedRole.role_name : '—';
+  const catLabel = currentCategory === 'technical' ? '⚙️ Technical' : '💼 Non-Technical';
+  document.getElementById('sum-category').textContent = catLabel;
+  const modeLabels = { text:'📝 Text', voice:'🎙️ Voice', video:'🎥 Video' };
+  document.getElementById('sum-mode').textContent = modeLabels[selectedMode];
+  document.getElementById('start-btn').disabled = !selectedRole;
+}
+
+async function startInterview() {
+  if (!selectedRole) return;
+  const btn = document.getElementById('start-btn');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span> Creating session…';
+  try {
+    const session = await apiFetch('/interviews', {
+      method: 'POST',
+      body: JSON.stringify({ role_id: selectedRole.role_id, mode: selectedMode, question_count: questionCount }),
+    });
+    showToast('Session created! Let\'s begin.', 'success');
+    setTimeout(() => { window.location.href = `/interview.html?session=${session.session_id}`; }, 400);
+  } catch (err) {
+    document.getElementById('setup-error').textContent = err.message;
+    document.getElementById('setup-error').classList.remove('hidden');
+    btn.disabled = false;
+    btn.textContent = 'Start Interview →';
+  }
+}
+</script>
+</body>
+</html>
