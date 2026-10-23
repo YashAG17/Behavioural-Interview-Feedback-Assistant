@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Start Interview — InterviewIQ</title>
+  <title>Start Interview — InterviewPrep</title>
   <meta name="description" content="Select your role, response mode, and interview length to begin your behavioural interview practice session." />
   <link rel="stylesheet" href="/css/styles.css" />
   <style>
@@ -15,12 +15,12 @@
     .roles-list { display:flex; flex-direction:column; gap:.6rem; }
     .mode-options { display:grid; grid-template-columns:repeat(3,1fr); gap:.75rem; }
     .mode-card { padding:1rem; border-radius:var(--r-lg); border:2px solid var(--c-border); background:var(--c-surface-alt); cursor:pointer; text-align:center; transition:all var(--t-normal); }
-    .mode-card:hover { border-color:rgba(99,102,241,.5); }
-    .mode-card.active { border-color:#6366f1; background:rgba(99,102,241,.12); box-shadow:0 0 0 3px rgba(99,102,241,.15); }
+    .mode-card:hover { border-color:color-mix(in srgb, var(--t-accent) 55%, var(--c-border)); }
+    .mode-card.active { border-color:var(--t-accent); background:color-mix(in srgb, var(--t-accent) 10%, var(--c-surface)); box-shadow:0 0 0 3px color-mix(in srgb, var(--t-accent) 14%, transparent); }
     .mode-card .mode-icon { font-size:1.75rem; margin-bottom:.4rem; }
     .mode-card .mode-name { font-weight:600; font-size:.9rem; }
     .mode-card .mode-desc { font-size:.75rem; color:var(--t-muted); margin-top:.2rem; }
-    .q-count-slider { width:100%; accent-color:#8b5cf6; }
+    .q-count-slider { width:100%; accent-color:var(--t-accent); }
     .summary-row { display:flex; justify-content:space-between; align-items:center; padding:.5rem 0; border-bottom:1px solid var(--c-border); font-size:.9rem; }
     .summary-row:last-child { border:none; }
     .summary-val { font-weight:600; color:var(--t-primary); }
@@ -32,7 +32,7 @@
   <div class="navbar-inner">
     <a href="/index.html" class="navbar-brand">
       <div class="brand-icon">🎯</div>
-      <span class="brand-name">InterviewIQ</span>
+      <span class="brand-name">InterviewPrep</span>
     </a>
     <div class="navbar-links">
       <a href="/dashboard.html" class="nav-link active" id="nav-dashboard">Practice</a>
@@ -48,8 +48,8 @@
 <div class="page page-enter">
   <div class="container" style="padding-top:2.5rem;padding-bottom:4rem;">
     <div class="mb-xl">
-      <h1>Set Up Your <span class="text-gradient">Interview</span></h1>
-      <p>Choose a role, response mode, and number of questions. Your question set will be locked in before you begin.</p>
+      <h1>Let?s get a practice session ready</h1>
+      <p>Pick a role and a format that feels comfortable. You can take your time with each answer.</p>
     </div>
 
     <div id="setup-error" class="alert alert-error mb-lg hidden" role="alert"></div>
@@ -100,17 +100,17 @@
         <div class="card">
           <h3 style="margin-bottom:1.25rem;">③ Number of Questions</h3>
           <div style="display:flex;align-items:center;gap:1rem;margin-bottom:.75rem;">
-            <input type="range" class="q-count-slider" id="q-count" min="10" max="15" value="10" aria-label="Number of questions" oninput="updateQCount(this.value)" />
-            <span id="q-count-display" style="font-family:var(--font-display);font-size:2rem;font-weight:800;color:var(--t-accent);min-width:40px;">10</span>
+            <input type="range" class="q-count-slider" id="q-count" min="5" max="15" value="5" aria-label="Number of questions" oninput="updateQCount(this.value)" />
+            <span id="q-count-display" style="font-family:var(--font-display);font-size:2rem;font-weight:800;color:var(--t-accent);min-width:40px;">5</span>
           </div>
-          <p style="font-size:.85rem;">Choose between 10 and 15 questions. The full set is locked in before you start.</p>
+          <p style="font-size:.85rem;">Choose 5 to 15 questions. Your set is fixed before you begin.</p>
         </div>
       </div>
 
       <!-- Right: Summary + Start -->
       <div class="config-panel">
         <div class="card card-glow">
-          <h3 style="margin-bottom:1.25rem;">Session Summary</h3>
+          <h3 style="margin-bottom:1.25rem;">Your session</h3>
 
           <div class="summary-row">
             <span class="text-secondary">Role</span>
@@ -126,18 +126,14 @@
           </div>
           <div class="summary-row">
             <span class="text-secondary">Questions</span>
-            <span class="summary-val" id="sum-count">10</span>
+            <span class="summary-val" id="sum-count">5</span>
           </div>
           <div class="summary-row">
             <span class="text-secondary">Est. Duration</span>
-            <span class="summary-val" id="sum-duration">~15 min</span>
+            <span class="summary-val" id="sum-duration">~8 min</span>
           </div>
 
           <div class="divider"></div>
-
-          <div class="alert alert-info mb-md" role="note" style="font-size:.8rem;">
-            Questions are randomly selected and locked in before you start. They will not change based on your answers.
-          </div>
 
           <button class="btn btn-primary btn-full btn-lg" id="start-btn" disabled onclick="startInterview()">
             Start Interview →
@@ -156,7 +152,7 @@
 let allRoles = { technical: [], non_technical: [] };
 let selectedRole = null;
 let selectedMode = 'text';
-let questionCount = 10;
+let questionCount = 5;
 let currentCategory = 'technical';
 
 const roleIcons = { SDE:'💻', DS:'📊', DA:'📈', MLE:'🤖', DEVOPS:'⚙️', CYBERSEC:'🔒', PM:'🗺️', BA:'📋', HR:'🤝', MKT:'📣', SALES:'📞', MC:'🏢' };

@@ -36,9 +36,9 @@ class Settings(BaseSettings):
     QUESTION_BANKS_DIR: Path = BASE_DIR / "question_banks"
 
     # ── Interview constraints ─────────────────────────────────────────────────
-    MIN_QUESTIONS: int = 10
+    MIN_QUESTIONS: int = 5
     MAX_QUESTIONS: int = 15
-    DEFAULT_QUESTIONS: int = 10
+    DEFAULT_QUESTIONS: int = 5
 
     # ── Media storage ─────────────────────────────────────────────────────────
     MEDIA_DIR: Path = BASE_DIR / "media"

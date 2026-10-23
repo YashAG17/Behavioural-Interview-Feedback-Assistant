@@ -64,7 +64,7 @@ class QuestionBankMeta(BaseModel):
 class CreateInterviewRequest(BaseModel):
     role_id: str
     mode: ResponseType
-    question_count: int = Field(default=10, ge=10, le=15)
+    question_count: int = Field(default=5, ge=5, le=15)
     seed: Optional[int] = None  # None → server generates
 
 

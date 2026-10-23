@@ -128,3 +128,46 @@ function scoreColor(score) {
   if (score >= 5)   return '#f59e0b';
   return '#ef4444';
 }
+
+// Keep the chosen appearance across pages and visits.
+function setTheme(theme) {
+  const dark = theme === 'dark';
+  document.documentElement.dataset.theme = dark ? 'dark' : 'light';
+  localStorage.setItem('interviewprep_theme', dark ? 'dark' : 'light');
+  const button = document.getElementById('theme-toggle');
+  if (button) {
+    button.setAttribute('aria-pressed', String(dark));
+    button.setAttribute('aria-label', `Switch to ${dark ? 'light' : 'dark'} mode`);
+    button.innerHTML = `<span class="theme-icon" aria-hidden="true">${dark ? '☀' : '☾'}</span><span class="theme-label">${dark ? 'Light' : 'Dark'} mode</span>`;
+  }
+}
+
+function initThemeToggle() {
+  const theme = localStorage.getItem('interviewprep_theme') || 'light';
+  setTheme(theme);
+  const navbar = document.querySelector('.navbar-inner');
+  if (!navbar || document.getElementById('theme-toggle')) return;
+
+  const button = document.createElement('button');
+  button.id = 'theme-toggle';
+  button.type = 'button';
+  button.className = 'btn btn-ghost btn-sm theme-toggle';
+  button.addEventListener('click', () => {
+    setTheme(document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark');
+  });
+
+  const actions = navbar.querySelector('.navbar-actions');
+  if (actions) {
+    const logout = actions.querySelector('#nav-logout-btn');
+    actions.insertBefore(button, logout || null);
+  } else {
+    navbar.appendChild(button);
+  }
+  setTheme(theme);
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initThemeToggle, { once: true });
+} else {
+  initThemeToggle();
+}

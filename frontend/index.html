@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>InterviewIQ — Behavioural Interview Feedback Assistant</title>
+  <title>InterviewPrep — Behavioural Interview Feedback Assistant</title>
   <meta name="description" content="Practice behavioural interviews for 12 professional roles with AI-powered feedback. Master the STAR method and ace your next interview." />
   <link rel="stylesheet" href="/css/styles.css" />
   <style>
@@ -19,9 +19,9 @@
 <!-- Navbar -->
 <nav class="navbar" aria-label="Main navigation">
   <div class="navbar-inner">
-    <a href="/index.html" class="navbar-brand" aria-label="InterviewIQ Home">
+    <a href="/index.html" class="navbar-brand" aria-label="InterviewPrep Home">
       <div class="brand-icon" aria-hidden="true">🎯</div>
-      <span class="brand-name">InterviewIQ</span>
+      <span class="brand-name">InterviewPrep</span>
     </a>
     <div class="navbar-links">
       <a href="/index.html" class="nav-link active" id="nav-home">Home</a>
@@ -40,10 +40,10 @@
   <!-- Hero -->
   <section class="hero" aria-labelledby="hero-heading">
     <div>
-      <div class="hero-badge" role="text">✨ AI-Powered Interview Coach</div>
-      <h1 id="hero-heading">Ace Every <span class="text-gradient">Behavioural</span><br>Interview</h1>
+      <div class="hero-badge" role="text">✨ A little practice goes a long way</div>
+      <h1 id="hero-heading">Feel ready for your next<br><span class="text-gradient">behavioural interview</span></h1>
       <p class="hero-subtitle">
-        Practice with role-specific question banks, get AI-generated feedback on your STAR method responses, and build the confidence to succeed in any interview.
+        A calm place to practise real interview questions, find your words, and get useful feedback before the big day.
       </p>
       <div class="stats-row" role="list">
         <div role="listitem"><div class="stat-number">12</div><div class="stat-label">Professional Roles</div></div>
@@ -51,7 +51,7 @@
         <div role="listitem"><div class="stat-number">3</div><div class="stat-label">Response Modes</div></div>
       </div>
       <div class="hero-actions">
-        <a href="/dashboard.html" class="btn btn-primary btn-lg" id="cta-start">Start Practising Free →</a>
+        <a href="/dashboard.html" class="btn btn-primary btn-lg" id="cta-start">Start practising →</a>
         <a href="#features" class="btn btn-ghost btn-lg">See How It Works</a>
       </div>
     </div>
@@ -61,8 +61,8 @@
   <section class="section" id="features" aria-labelledby="features-heading">
     <div class="container">
       <div class="text-center mb-lg">
-        <h2 id="features-heading">Everything You Need to <span class="text-gradient">Excel</span></h2>
-        <p style="margin:.75rem auto 0;max-width:500px;">A comprehensive platform that simulates real interview conditions and delivers actionable, evidence-based feedback.</p>
+        <h2 id="features-heading">Practice, reflect, <span class="text-gradient">get better</span></h2>
+        <p style="margin:.75rem auto 0;max-width:500px;">Work through a few thoughtful questions at your own pace, then look back at what came through in your answers.</p>
       </div>
       <div class="features-grid mt-xl">
         <div class="feature-card">
@@ -72,8 +72,8 @@
         </div>
         <div class="feature-card">
           <div class="feature-icon" style="background:rgba(16,185,129,.15);" aria-hidden="true">🔀</div>
-          <h3>Seeded Random Selection</h3>
-          <p>10–15 questions per session, reproducibly selected. Same seed, same questions — perfect for comparing your improvement.</p>
+          <h3>A fresh set each time</h3>
+          <p>Choose a quick 5-question round or take your time with up to 15. Your questions stay fixed once practice begins.</p>
         </div>
         <div class="feature-card">
           <div class="feature-icon" style="background:rgba(239,68,68,.15);" aria-hidden="true">🎙️</div>
@@ -82,7 +82,7 @@
         </div>
         <div class="feature-card">
           <div class="feature-icon" style="background:rgba(245,158,11,.15);" aria-hidden="true">🤖</div>
-          <h3>AI-Powered Evaluation</h3>
+          <h3>Feedback with examples</h3>
           <p>Google Gemini evaluates all your responses holistically — one consolidated report with STAR-method analysis.</p>
         </div>
         <div class="feature-card">
@@ -262,7 +262,7 @@ document.getElementById('register-form').addEventListener('submit', async (e) =>
     setToken(data.access_token);
     const user = await apiFetch('/auth/me');
     setUser(user);
-    showToast('Account created! Welcome to InterviewIQ 🎉', 'success');
+    showToast('Account created! Welcome to InterviewPrep 🎉', 'success');
     setTimeout(() => { window.location.href = '/dashboard.html'; }, 600);
   } catch (err) {
     errEl.textContent = err.message;

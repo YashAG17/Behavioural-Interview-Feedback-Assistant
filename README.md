@@ -1,4 +1,4 @@
-# InterviewIQ
+# InterviewPrep
 
 Behavioural interview practice app with a FastAPI API, SQLite by default, 12 JSON role banks, browser text/speech/video capture, and consolidated AI evaluation reports.
 
@@ -22,7 +22,7 @@ The SQLite database is created in the project root on first startup. `DATABASE_U
 
 ## Workflow
 
-Create an account, choose one of the 12 roles, response mode, and 10–15 questions. The backend saves a seeded, fixed question set. Answers are saved while navigating and restored when a session is resumed. Submit once all answers are present; Ollama is tried first and Gemini is used only if Ollama fails. The report and prior sessions are available from History.
+Create an account, choose one of the 12 roles, response mode, and 5–15 questions. The backend saves a seeded, fixed question set. Answers are saved while navigating and restored when a session is resumed. Submit once all answers are present; Ollama is tried first and Gemini is used only if Ollama fails. The report and prior sessions are available from History.
 
 Speech transcription uses the browser's Web Speech API. Video can be previewed and recorded in the browser, but the current app does not upload or retain video files; the answer transcript is what is saved and evaluated. Do not enter sensitive personal information in practice responses.
 
